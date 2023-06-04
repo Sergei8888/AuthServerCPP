@@ -19,8 +19,8 @@ int main() {
     svr.Post("/api/signup", [userController](const httplib::Request &req, httplib::Response &res) {
         userController->registerUser(req, res);
     });
-    svr.Post("/api/login", [](const httplib::Request &req, httplib::Response &res) {
-        res.set_content("Hello World!", "text/plain");
+    svr.Post("/api/login", [userController](const httplib::Request &req, httplib::Response &res) {
+        userController->loginUser(req, res);
     });
 
     svr.listen("localhost", 8000);

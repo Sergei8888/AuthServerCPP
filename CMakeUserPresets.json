@@ -1,0 +1,9 @@
+{
+    "version": 4,
+    "vendor": {
+        "conan": {}
+    },
+    "include": [
+        "/Users/sergei888/CLionProjects/auth_server_CPP/vendors/CMakePresets.json"
+    ]
+}

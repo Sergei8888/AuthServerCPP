@@ -9,7 +9,7 @@
 #include <utility>
 #include <iostream>
 #include <string>
-#include "../models/user-model.h"
+#include "../dto/user-model.h"
 
 class UserRepository {
 private:
@@ -19,6 +19,7 @@ public:
         this->db->prepare("insert_user", "INSERT INTO users (username, login, password, session_token) VALUES ($1, $2, $3, $4)");
         this->db->prepare("get_user_by_login", "SELECT * FROM users WHERE login = $1");
         this->db->prepare("get_user_by_id", "SELECT * FROM users WHERE id = $1");
+        this->db->prepare("update_user_session_token", "UPDATE users SET session_token = $1 WHERE id = $2");
     };
 
     ~UserRepository() = default;
@@ -48,24 +49,17 @@ public:
         UserModel user;
         user.id = result[0][0].as<int>();
         user.username = result[0][1].as<std::string>();
-        user.login = result[0][2].as<std::string>();
-        user.password = result[0][3].as<std::string>();
+        user.password = result[0][2].as<std::string>();
+        user.login = result[0][3].as<std::string>();
+        user.session_token = result[0][4].as<std::string>();
 
         return user;
     };
 
-    UserModel getUserById(int id) {
+    void updateSessionToken(std::string sessionToken, int userId) {
         pqxx::work txn(*this->db);
-        pqxx::result result = txn.exec_prepared("get_user_by_id", id);
+        txn.exec_prepared("update_user_session_token", sessionToken, userId);
         txn.commit();
-
-        UserModel user = *new UserModel{};
-        user.id = result[0][0].as<int>();
-        user.username = result[0][1].as<std::string>();
-        user.login = result[0][2].as<std::string>();
-        user.password = result[0][3].as<std::string>();
-
-        return user;
     };
 };
 

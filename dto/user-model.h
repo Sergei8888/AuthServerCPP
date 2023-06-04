@@ -9,12 +9,22 @@
 
 using namespace std;
 
-class UserModel {
-public:
+struct UserModel {
     int id;
     std::string username;
     std::string login;
     std::string password;
     std::string session_token;
+};
+
+struct UserSignupDto {
+    std::string username;
+    std::string login;
+    std::string password;
+};
+
+struct UserLoginDto {
+    std::string login;
+    std::string password;
 };
 #endif //AUTHSERVER_USER_MODEL_H

@@ -21,3 +21,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
 # cryptopp
 find_package(cryptopp REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE cryptopp::cryptopp)
+
+# sole
+find_package(sole REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE sole::sole)

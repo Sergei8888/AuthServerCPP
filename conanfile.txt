@@ -3,6 +3,7 @@ cpp-httplib/0.12.4
 nlohmann_json/3.11.2
 libpqxx/7.7.5
 cryptopp/8.7.0
+sole/1.0.4
 
 [generators]
 CMakeDeps
