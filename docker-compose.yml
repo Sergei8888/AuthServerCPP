@@ -1,17 +1,18 @@
 version: '3'
 
+# Postgres
 services:
     db:
-        image: postgres
-        restart: unless-stopped
+        image: postgres:latest
+        restart: always
         environment:
-          POSTGRES_PASSWORD: postgres
           POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         ports:
-        - 5432:5432
+        - "5432:5432"
         volumes:
-        - auth-server-pg-data:/var/lib/postgresql/data
+        - auth-server-postgres_data:/var/lib/postgresql/data
 
 volumes:
-    auth-server-pg-data:
+    auth-server-postgres_data:

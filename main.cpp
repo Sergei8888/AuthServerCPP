@@ -2,34 +2,28 @@
 // Created by Sergei Kuzmenkov on 30.05.2023.
 //
 
-#include "./vendors/mylogger/HandMadeLogger.h"
-#include <iostream>
-#include "./vendors/cpp-httplib/httplib.h"
-#include "src/auth/auth.controller.h"
+#include <memory>
+#include "./global/db-connection-singleton.h"
+#include "./repositories/user-repository.h"
+#include "./controllers/auth-controller.h"
+#include <httplib/httplib.h>
 
 int main() {
+    // Dependencies
+    auto db = DbConnectionSingleton::getInstance();
+    auto userRepository = std::make_shared<UserRepository>(db);
+    auto userController = std::make_shared<AuthController>(userRepository);
+
+    // Start httplib server
     httplib::Server svr;
-
-    svr.set_default_headers({
-        {"Content-Type", "application/json"},
-        {"Access-Control-Allow-Origin", "*"},
+    svr.Post("/api/signup", [userController](const httplib::Request &req, httplib::Response &res) {
+        userController->registerUser(req, res);
     });
-
-    auto logger = new Logger(
-            LoggerSettings{
-                    std::vector<LogLevelClass::LogLevel>{LogLevelClass::LogLevel::INFO,
-                                                         LogLevelClass::LogLevel::WARNING,
-                                                         LogLevelClass::LogLevel::ERROR},
-                    std::vector<LoggerTransport>{
-                            {&std::cout, LoggerTransport::LoggerTransportTypes::CONSOLE}}},
-            LogMessageSettings{LogLevelClass::LogLevel::INFO, true, true});
-
-    auto authController = new AuthController(logger);
-
-    svr.Post("/signup", [authController](const httplib::Request& req, httplib::Response& res) {
-        authController->signUp(req, res);
+    svr.Post("/api/login", [](const httplib::Request &req, httplib::Response &res) {
+        res.set_content("Hello World!", "text/plain");
     });
 
     svr.listen("localhost", 8000);
+
     return 0;
 }
