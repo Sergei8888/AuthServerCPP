@@ -119,6 +119,17 @@ public:
 
         res.status = 200;
     }
+
+    void logoutUser(const httplib::Request &req, httplib::Response &res) {
+        std::string cookiesString = req.get_header_value("Cookie");
+        std::string sessionToken = cookiesString.substr(cookiesString.find("session_token=") + 14, 36);
+
+        UserModel user = this->userRepository->getBySessionToken(sessionToken);
+        this->userRepository->updateSessionToken("", user.id);
+
+        res.set_header("Set-Cookie", "session_token=; Path=/; HttpOnly");
+        res.status = 200;
+    }
 };
 
 #endif //AUTHSERVER_AUTH_CONTROLLER_H

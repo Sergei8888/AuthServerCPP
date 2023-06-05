@@ -25,3 +25,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE cryptopp::cryptopp)
 # sole
 find_package(sole REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE sole::sole)
+
+# Boost
+find_package(boost REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE boost::boost)
