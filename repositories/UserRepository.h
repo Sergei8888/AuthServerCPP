@@ -2,14 +2,14 @@
 // Created by Sergei Kuzmenkov on 03.06.2023.
 //
 
-#ifndef AUTHSERVER_USER_REPOSITORY_H
-#define AUTHSERVER_USER_REPOSITORY_H
+#ifndef AUTHSERVER_USERREPOSITORY_H
+#define AUTHSERVER_USERREPOSITORY_H
 
 #include <pqxx/pqxx>
 #include <utility>
 #include <iostream>
 #include <string>
-#include "../dto/user-model.h"
+#include "../dto/UserModel.h"
 
 class UserRepository {
 private:
@@ -80,4 +80,4 @@ public:
     };
 };
 
-#endif //AUTHSERVER_USER_REPOSITORY_H
+#endif //AUTHSERVER_USERREPOSITORY_H

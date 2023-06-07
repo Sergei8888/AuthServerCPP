@@ -2,8 +2,8 @@
 // Created by Sergei Kuzmenkov on 03.06.2023.
 //
 
-#ifndef AUTHSERVER_USER_MODEL_H
-#define AUTHSERVER_USER_MODEL_H
+#ifndef AUTHSERVER_USERMODEL_H
+#define AUTHSERVER_USERMODEL_H
 
 #include <string>
 
@@ -27,4 +27,4 @@ struct UserLoginDto {
     std::string login;
     std::string password;
 };
-#endif //AUTHSERVER_USER_MODEL_H
+#endif //AUTHSERVER_USERMODEL_H

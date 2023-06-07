@@ -6,36 +6,34 @@
 #define AUTHSERVER_AUTHGUARD_H
 
 #include <httplib.h>
-#include "../repositories/user-repository.h"
+#include "../repositories/UserRepository.h"
+#include "../global/ResponseService.h"
 
 class AuthGuard {
 private:
     const std::shared_ptr<UserRepository> userRepository;
 public:
-    AuthGuard(const std::shared_ptr<UserRepository> &userRepository) : userRepository(userRepository) {};
+    explicit AuthGuard(const std::shared_ptr<UserRepository> &userRepository) : userRepository(userRepository) {};
 
     ~AuthGuard() = default;
 
     bool checkSessionToken(const httplib::Request &req, httplib::Response &res) {
         std::string cookiesString = req.get_header_value("Cookie");
         if (cookiesString.empty()) {
-            res.status = 401;
-            res.set_content("Unauthorized", "text/plain");
+            ResponseService::sendUnauthorized(res);
             return false;
         }
 
         std::string sessionToken = cookiesString.substr(cookiesString.find("session_token=") + 14, 36);
         if (sessionToken.empty()) {
-            res.status = 401;
-            res.set_content("Unauthorized", "text/plain");
+            ResponseService::sendUnauthorized(res);
             return false;
         }
 
         try {
             this->userRepository->getBySessionToken(sessionToken);
         } catch (std::runtime_error &e) {
-            res.status = 401;
-            res.set_content("Unauthorized", "text/plain");
+            ResponseService::sendUnauthorized(res);
             return false;
         }
 

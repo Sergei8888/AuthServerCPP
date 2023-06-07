@@ -3,13 +3,13 @@
 //
 
 #include <memory>
-#include "./global/db-connection-singleton.h"
-#include "./repositories/user-repository.h"
-#include "./controllers/auth-controller.h"
-#include "./controllers/fibonacci-controller.h"
+#include "./global/DbConnectionSingleton.h"
+#include "./repositories/UserRepository.h"
+#include "./controllers/AuthController.h"
+#include "./controllers/FibonacciController.h"
 #include <httplib/httplib.h>
 #include "./global/logger/HandMadeLogger.h"
-#include "./guards/authGuard.h"
+#include "./guards/AuthGuard.h"
 
 int main() {
     // Dependencies

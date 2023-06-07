@@ -7,6 +7,8 @@
 
 #include <httplib.h>
 #include <boost/multiprecision/cpp_int.hpp>
+#include "../global/ResponseService.h"
+
 using big_int = boost::multiprecision::cpp_int;
 
 class FibonacciController {
@@ -19,8 +21,7 @@ public:
         big_int n = std::stoi(req.matches[1]);
 
         if (n < 0) {
-            res.status = 400;
-            res.set_content("Bad request", "text/plain");
+            ResponseService::sendBadRequest(res);
             return;
         }
 

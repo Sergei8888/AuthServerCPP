@@ -2,16 +2,17 @@
 // Created by Sergei Kuzmenkov on 03.06.2023.
 //
 
-#ifndef AUTHSERVER_AUTH_CONTROLLER_H
-#define AUTHSERVER_AUTH_CONTROLLER_H
+#ifndef AUTHSERVER_AUTHCONTROLLER_H
+#define AUTHSERVER_AUTHCONTROLLER_H
 
 #include <span>
 #include <string>
-#include "../repositories/user-repository.h"
+#include "../repositories/UserRepository.h"
 #include <httplib/httplib.h>
 #include <nlohmann/json.hpp>
 #include <cryptopp/sha.h>
 #include <sole.hpp>
+#include "../global/ResponseService.h"
 
 
 class AuthController {
@@ -64,8 +65,7 @@ public:
         try {
             user = this->parseUserSignupDto(req);
         } catch (std::runtime_error &e) {
-            res.set_content("Bad request", "text/plain");
-            res.status = 400;
+            ResponseService::sendBadRequest(res);
             return;
         }
 
@@ -81,11 +81,10 @@ public:
             });
         } catch (std::exception &insertError) {
             if (std::string(insertError.what()) == "User already exists") {
-                res.set_content("User already exists", "text/plain");
-                res.status = 409;
+                ResponseService::sendConflict(res, insertError.what());
                 return;
             } else {
-                res.set_content("Internal server error", "text/plain");
+                ResponseService::sendInternalServerError(res);
                 return;
             }
         }
@@ -98,8 +97,7 @@ public:
         try {
             user = parseUserLoginDto(req);
         } catch (std::runtime_error &e) {
-            res.set_content("Bad request", "text/plain");
-            res.status = 400;
+            ResponseService::sendBadRequest(res);
             return;
         }
 
@@ -107,8 +105,7 @@ public:
         UserModel queriedUser = this->userRepository->getUserByLogin(user.login);
 
         if (queriedUser.password != userPassword) {
-            res.set_content("Unauthorized", "text/plain");
-            res.status = 401;
+            ResponseService::sendUnauthorized(res);
             return;
         }
 
@@ -132,4 +129,4 @@ public:
     }
 };
 
-#endif //AUTHSERVER_AUTH_CONTROLLER_H
+#endif //AUTHSERVER_AUTHCONTROLLER_H
