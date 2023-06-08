@@ -25,9 +25,11 @@ private:
 
         return user;
     }
+
 public:
     explicit UserRepository(std::shared_ptr<pqxx::connection> db) : db(std::move(db)) {
-        this->db->prepare("insert_user", "INSERT INTO users (username, login, password, session_token) VALUES ($1, $2, $3, $4)");
+        this->db->prepare("insert_user",
+                          "INSERT INTO users (username, login, password, session_token) VALUES ($1, $2, $3, $4)");
         this->db->prepare("get_user_by_login", "SELECT * FROM users WHERE login = $1");
         this->db->prepare("get_user_by_id", "SELECT * FROM users WHERE id = $1");
         this->db->prepare("get_user_by_session_token", "SELECT * FROM users WHERE session_token = $1");
@@ -36,7 +38,7 @@ public:
 
     ~UserRepository() = default;
 
-    void insertUser(const UserModel& user) {
+    void insertUser(const UserModel &user) {
         try {
             pqxx::work txn(*this->db);
             txn.exec_prepared("insert_user", user.username, user.login, user.password, user.session_token);
@@ -73,7 +75,7 @@ public:
         return user;
     };
 
-    void updateSessionToken(const std::string& sessionToken, int userId) {
+    void updateSessionToken(const std::string &sessionToken, int userId) {
         pqxx::work txn(*this->db);
         txn.exec_prepared("update_user_session_token", sessionToken, userId);
         txn.commit();

@@ -11,6 +11,9 @@
 #include "./global/logger/HandMadeLogger.h"
 #include "./guards/AuthGuard.h"
 
+const int PORT = 8080;
+const std::string HOST = "localhost";
+
 int main() {
     // Dependencies
     auto db = DbConnectionSingleton::getInstance();
@@ -49,7 +52,9 @@ int main() {
         logger->logHttpRequest(req, res);
     });
 
-    svr.listen("0.0.0.0", 8000);
+    logger->log( "Server started on http://" + HOST + ":" + std::to_string(PORT));
+
+    svr.listen(HOST, PORT);
 
     return 0;
 }

@@ -56,7 +56,8 @@ private:
     }
 
 public:
-    explicit AuthController(std::shared_ptr<UserRepository> userRepository) : userRepository(std::move(userRepository)) {};
+    explicit AuthController(std::shared_ptr<UserRepository> userRepository) : userRepository(
+            std::move(userRepository)) {};
 
     ~AuthController() = default;
 
